@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Erreur 404{% endblock %}
+
+{% block content %}
+<section class="error-page column">
+    <div class="error-copy center">
+        <p class="eyebrow">Erreur {{ error_code }}</p>
+        <h1>{{ error_title }}</h1>
+        <p>{{ error_message }}</p>
+        <p class="quote">"La vérité si je note, personne n'a vu passer cette scène dans le montage final." — Rabbi Jacob</p>
+        <div class="error-actions center">
+            <a class="btn" href="/films">Retourner à l'exploration</a>
+            <a class="btn ghost" href="/watchlist">Ouvrir ma watchlist</a>
+        </div>
+    </div>
+    <div class="error-visuals single">
+        <!-- Remplacer par votre image personnalisée -->
+        <img src="{{ url_for('static', path='img/error_404.png') }}" alt="Scène introuvable" class="error-img">
+    </div>
+</section>
+{% endblock %}
+
