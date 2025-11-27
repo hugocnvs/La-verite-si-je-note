@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}{{ film.title }}{% endblock %}
+
+{% block content %}
+<section class="detail-card">
+    <div class="detail-hero">
+        <div class="detail-poster" style="background-image: url('{{ film.backdrop_url or film.poster_url or '' }}');"></div>
+        <div class="detail-info">
+            <p class="eyebrow">{{ film.release_year or "Année inconnue" }}</p>
+            <h1>{{ film.title }}</h1>
+            <p class="lead">{{ film.overview or "Aucun synopsis détaillé n'a encore été ajouté." }}</p>
+            <ul class="meta">
+                {% if film.director %}<li>Réalisé par {{ film.director }}</li>{% endif %}
+                {% if film.runtime_minutes %}<li>{{ film.runtime_minutes }} min</li>{% endif %}
+                {% if film.country %}<li>{{ film.country }}</li>{% endif %}
+            </ul>
+            <div class="tags">
+                {% for tag in film.tags %}
+                    <span>{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            <div class="detail-rating">
+                {% if avg_rating %}
+                    <p>{{ avg_rating }} ★ · {{ review_count }} avis</p>
+                {% else %}
+                    <p>Pas encore d'avis. Soyez le premier !</p>
+                {% endif %}
+                {% if current_user %}
+                    <form method="post" action="/films/{{ film.id }}/watchlist">
+                        <button type="submit" class="btn ghost slim">
+                            {% if film_in_watchlist %}
+                                Retirer de ma watchlist
+                            {% else %}
+                                Ajouter à ma watchlist
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="review-section">
+    <div class="review-card">
+        <h2>Votre avis</h2>
+        {% if current_user %}
+            <form method="post" action="/films/{{ film.id }}/reviews" class="form-grid">
+                <label>
+                    Note (1-5)
+                    <input type="number" name="rating" min="1" max="5" value="{{ user_review.rating if user_review else '' }}" required>
+                </label>
+                <label>
+                    Commentaire
+                    <textarea name="comment" rows="3" placeholder="Partagez vos émotions...">{{ user_review.comment if user_review else '' }}</textarea>
+                </label>
+                <button type="submit" class="btn full">
+                    {% if user_review %}Mettre à jour{% else %}Publier{% endif %}
+                </button>
+            </form>
+        {% else %}
+            <p>Connectez-vous pour laisser un commentaire.</p>
+            <a class="btn" href="/login">Se connecter</a>
+        {% endif %}
+    </div>
+
+    <div class="comments">
+        <h2>Commentaires</h2>
+        {% if not reviews %}
+            <p class="muted">Personne n'a encore partagé son ressenti.</p>
+        {% endif %}
+        {% for review in reviews %}
+            <article class="comment">
+                <div class="comment-head">
+                    <strong>{{ review.user.username if review.user else "Utilisateur" }}</strong>
+                    <span>{{ review.rating }} ★</span>
+                </div>
+                <p>{{ review.comment or "Pas de commentaire détaillé." }}</p>
+                <small class="muted">Publié le {{ review.created_at.strftime('%d/%m/%Y') }}</small>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+

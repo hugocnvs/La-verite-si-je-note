@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Connexion</h1>
+    <p>Ravi de vous revoir. Continuez à partager vos coups de cœur ciné.</p>
+    <form method="post" class="form-grid">
+        <label>
+            Email
+            <input type="email" name="email" required placeholder="vous@example.com">
+        </label>
+        <label>
+            Mot de passe
+            <input type="password" name="password" required placeholder="••••••••">
+        </label>
+        <button type="submit" class="btn full">Se connecter</button>
+    </form>
+    <p class="auth-switch">Pas encore de compte ? <a href="/register">Créer un compte</a></p>
+</section>
+{% endblock %}
+

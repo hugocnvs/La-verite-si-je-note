@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Explorer les films{% endblock %}
+
+{% block content %}
+<section class="filters-inline">
+    <form method="get" class="filters-form" id="filters-form">
+        <label class="search">
+            <span>Recherche instantanée</span>
+            <input type="text" name="q" value="{{ selected_query }}" placeholder="Tapez pour filtrer en direct">
+        </label>
+        <div class="tags-filter">
+            <span>Tags</span>
+            <div class="tags-scroll">
+                {% for tag in tags %}
+                    <label class="tag-option">
+                        <input type="checkbox" name="tags" value="{{ tag.name }}" {% if tag.name in selected_tags %}checked{% endif %}>
+                        <span>{{ tag.name }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn">Filtrer</button>
+            <a href="/films" class="btn ghost">Réinitialiser</a>
+        </div>
+    </form>
+</section>
+
+<section class="grid" id="films-grid">
+    {% include "films/_cards.html" %}
+</section>
+{% endblock %}
+

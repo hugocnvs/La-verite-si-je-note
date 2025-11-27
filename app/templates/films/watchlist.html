@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Ma watchlist{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Séances privées</p>
+        <h1>Ma watchlist</h1>
+        <p class="lead">
+            Tous les films que vous avez mis de côté pour les savourer plus tard. Cliquez sur une carte pour revenir au détail ou gérez vos ajouts depuis la fiche film.
+        </p>
+    </div>
+    <div class="chip-counter">
+        {{ watchlist|length }} titre{% if watchlist|length > 1 %}s{% endif %}
+    </div>
+</section>
+
+<section class="watchlist-grid">
+    {% if not films %}
+        <div class="empty-state">
+            <p>Votre watchlist est vide. Ajoutez un film depuis sa page pour le retrouver ici.</p>
+        </div>
+    {% else %}
+        {% include "films/_cards.html" %}
+    {% endif %}
+</section>
+{% endblock %}
+

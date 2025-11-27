@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Rejoindre la communauté</h1>
+    <p>Inscrivez-vous pour noter les films, laisser des commentaires et découvrir des pépites.</p>
+    <form method="post" class="form-grid">
+        <label>
+            Nom d'utilisateur
+            <input type="text" name="username" required minlength="3" placeholder="cinelover">
+        </label>
+        <label>
+            Email
+            <input type="email" name="email" required placeholder="vous@example.com">
+        </label>
+        <label>
+            Mot de passe
+            <input type="password" name="password" required minlength="6" placeholder="••••••••">
+        </label>
+        <label>
+            Confirmer le mot de passe
+            <input type="password" name="confirm_password" required minlength="6" placeholder="••••••••">
+        </label>
+        <button type="submit" class="btn full">Créer mon compte</button>
+    </form>
+    <p class="auth-switch">Déjà membre ? <a href="/login">Se connecter</a></p>
+</section>
+{% endblock %}
+
