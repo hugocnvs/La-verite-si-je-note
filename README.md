@@ -1,4 +1,4 @@
-# 🎬 La Vérité Si Je Note
+# La Vérité Si Je Note
 
 ![Header](img/header.jpg)
 

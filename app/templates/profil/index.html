@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Mon profil{% endblock %}
+
+{% block content %}
+<div class="profil-page">
+    <!-- En-tête du profil -->
+    <section class="profil-header">
+        <div class="profil-avatar">
+            <span>{{ current_user.username[0]|upper }}</span>
+        </div>
+        <div class="profil-info">
+            <h1>{{ current_user.username }}</h1>
+            <p class="profil-email">{{ current_user.email }}</p>
+            <p class="profil-since">Membre depuis {{ current_user.created_at.strftime('%B %Y') }}</p>
+        </div>
+    </section>
+
+    <!-- Statistiques -->
+    <section class="profil-stats">
+        <h2>Mes statistiques</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value">{{ stats.total_films }}</span>
+                <span class="stat-label">Films vus</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{% if stats.avg_rating %}{{ stats.avg_rating }} ★{% else %}-{% endif %}</span>
+                <span class="stat-label">Note moyenne</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ stats.favorite_genre or '-' }}</span>
+                <span class="stat-label">Genre préféré</span>
+            </div>
+        </div>
+
+        {% if stats.genre_counts %}
+        <div class="stats-details">
+            <div class="stat-section">
+                <h3>Genres les plus vus</h3>
+                <div class="genre-bars">
+                    {% for genre, count in stats.genre_counts %}
+                    <div class="genre-bar-item">
+                        <span class="genre-name">{{ genre }}</span>
+                        <div class="genre-bar">
+                            <div class="genre-bar-fill" style="width: {{ (count / stats.total_films * 100)|int }}%">
+                            </div>
+                        </div>
+                        <span class="genre-count">{{ count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="stat-section">
+                <h3>Distribution des notes</h3>
+                <div class="rating-bars">
+                    {% for rating in [5, 4, 3, 2, 1] %}
+                    <div class="rating-bar-item">
+                        <span class="rating-label">{{ rating }} ★</span>
+                        <div class="rating-bar">
+                            <div class="rating-bar-fill"
+                                style="width: {{ (stats.rating_distribution[rating] / stats.total_films * 100)|int if stats.total_films else 0 }}%">
+                            </div>
+                        </div>
+                        <span class="rating-count">{{ stats.rating_distribution[rating] }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    {% if top_rated %}
+    <!-- Films les mieux notés -->
+    <section class="profil-section">
+        <h2>Mes coups de cœur (5★)</h2>
+        <div class="profil-films-row">
+            {% for review in top_rated %}
+            <a href="/films/{{ review.film.id }}" class="profil-film-card">
+                <div class="profil-film-poster" style="background-image: url('{{ review.film.poster_url or '' }}');">
+                </div>
+                <div class="profil-film-info">
+                    <span class="profil-film-title">{{ review.film.title }}</span>
+                    <span class="profil-film-rating">{{ review.rating }} ★</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if lowest_rated %}
+    <!-- Films les moins bien notés -->
+    <section class="profil-section">
+        <h2>Mes déceptions (1-2★)</h2>
+        <div class="profil-films-row">
+            {% for review in lowest_rated %}
+            <a href="/films/{{ review.film.id }}" class="profil-film-card">
+                <div class="profil-film-poster" style="background-image: url('{{ review.film.poster_url or '' }}');">
+                </div>
+                <div class="profil-film-info">
+                    <span class="profil-film-title">{{ review.film.title }}</span>
+                    <span class="profil-film-rating">{{ review.rating }} ★</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Tous les films vus -->
+    <section class="profil-section">
+        <h2>Tous mes films ({{ reviews|length }})</h2>
+
+        <div class="profil-filters">
+            <form method="get" class="profil-search-form">
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Rechercher dans mes films...">
+                <select name="sort">
+                    <option value="recent" {% if current_sort=='recent' %}selected{% endif %}>Plus récents</option>
+                    <option value="rating_high" {% if current_sort=='rating_high' %}selected{% endif %}>Meilleures notes
+                    </option>
+                    <option value="rating_low" {% if current_sort=='rating_low' %}selected{% endif %}>Moins bonnes notes
+                    </option>
+                    <option value="title" {% if current_sort=='title' %}selected{% endif %}>Titre (A-Z)</option>
+                </select>
+                <button type="submit" class="btn">Filtrer</button>
+            </form>
+        </div>
+
+        {% if reviews %}
+        <div class="profil-reviews-grid">
+            {% for review in reviews %}
+            <article class="profil-review-card">
+                <a href="/films/{{ review.film.id }}" class="profil-review-poster"
+                    style="background-image: url('{{ review.film.poster_url or '' }}');"></a>
+                <div class="profil-review-content">
+                    <div class="profil-review-header">
+                        <a href="/films/{{ review.film.id }}" class="profil-review-title">{{ review.film.title }}</a>
+                        <span class="profil-review-rating">{{ review.rating }} ★</span>
+                    </div>
+                    {% if review.film.release_year %}
+                    <span class="profil-review-year">{{ review.film.release_year }}</span>
+                    {% endif %}
+                    {% if review.comment %}
+                    <p class="profil-review-comment">{{ review.comment[:100] }}{% if review.comment|length > 100 %}...{%
+                        endif %}</p>
+                    {% endif %}
+                    <span class="profil-review-date">Vu le {{ review.created_at.strftime('%d/%m/%Y') }}</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            {% if search_query %}
+            <p>Aucun film trouvé pour « {{ search_query }} »</p>
+            {% else %}
+            <p>Vous n'avez pas encore noté de films</p>
+            <a href="/films" class="btn">Découvrir des films</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

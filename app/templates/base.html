@@ -16,13 +16,13 @@
     <div class="noise-overlay"></div>
     <header class="app-header">
         <div class="brand">
-            <a href="/films">🎬 {{ settings.app_name }}</a>
+            <a href="/films">{{ settings.app_name }}</a>
         </div>
         <nav>
             {% if current_user %}
             <a class="btn ghost" href="/tmdb/search">+ Ajouter un film</a>
             <a class="btn ghost" href="/watchlist">Ma watchlist ({{ watchlist|length }})</a>
-            <span class="user-chip">Connecté en tant que {{ current_user.username }}</span>
+            <a class="btn ghost icon-btn" href="/profil" title="Mon profil">👤</a>
             <form action="/logout" method="post">
                 <button type="submit" class="btn ghost">Se déconnecter</button>
             </form>

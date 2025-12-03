@@ -10,14 +10,31 @@
         </label>
         <div class="tags-filter">
             <span>Tags</span>
-            <div class="tags-scroll">
-                {% for tag in tags %}
-                <label class="tag-option">
-                    <input type="checkbox" name="tags" value="{{ tag.name }}" {% if tag.name in selected_tags
-                        %}checked{% endif %}>
-                    <span>{{ tag.name }}</span>
-                </label>
-                {% endfor %}
+            <div class="dropdown-container">
+                <button type="button" class="dropdown-toggle" id="tags-toggle">
+                    <span class="dropdown-text">
+                        {% if selected_tags %}
+                        {{ selected_tags|length }} tag(s) sélectionné(s)
+                        {% else %}
+                        Sélectionner des tags
+                        {% endif %}
+                    </span>
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="dropdown-menu" id="tags-menu">
+                    <div class="dropdown-actions">
+                        <button type="button" class="dropdown-action" id="select-all-tags">Tout sélectionner</button>
+                        <button type="button" class="dropdown-action" id="deselect-all-tags">Tout
+                            désélectionner</button>
+                    </div>
+                    {% for tag in tags %}
+                    <label class="dropdown-item">
+                        <input type="checkbox" name="tags" value="{{ tag.name }}" {% if tag.name in selected_tags
+                            %}checked{% endif %}>
+                        <span>{{ tag.name }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="filter-actions">
