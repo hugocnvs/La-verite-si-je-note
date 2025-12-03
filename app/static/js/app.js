@@ -6,7 +6,29 @@ const debounce = (fn, delay = 250) => {
   };
 };
 
+// Theme switcher
+const initThemeSwitcher = () => {
+  const toggle = document.getElementById("theme-toggle");
+  if (!toggle) return;
+
+  const setTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  };
+
+  const getCurrentTheme = () => {
+    return document.documentElement.getAttribute("data-theme") || "light";
+  };
+
+  toggle.addEventListener("click", () => {
+    const current = getCurrentTheme();
+    setTheme(current === "dark" ? "light" : "dark");
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Initialiser le theme switcher
+  initThemeSwitcher();
   document.querySelectorAll(".flash").forEach((flash, index) => {
     flash.style.animationDelay = `${index * 100}ms`;
     setTimeout(() => flash.classList.add("hide"), 5000);

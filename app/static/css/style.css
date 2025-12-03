@@ -1,14 +1,59 @@
 :root {
+  --bg: #fafafa;
+  --card: #ffffff;
+  --card-strong: #ffffff;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.1);
+  --accent-secondary: #f97316;
+  --text: #1e293b;
+  --muted: #64748b;
+  --error: #dc2626;
+  --success: #16a34a;
+  --border: #e2e8f0;
+  --shadow: rgba(0, 0, 0, 0.08);
+  --input-bg: #ffffff;
+  --card-hover-bg: #f8fafc;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Mode sombre */
+[data-theme="dark"] {
   --bg: #0f172a;
-  --card: rgba(15, 23, 42, 0.7);
-  --card-strong: rgba(15, 23, 42, 0.95);
-  --accent: #64ffda;
-  --accent-soft: rgba(100, 255, 218, 0.15);
-  --text: #e2e8f0;
+  --card: rgba(30, 41, 59, 0.8);
+  --card-strong: rgba(30, 41, 59, 0.95);
+  --accent: #60a5fa;
+  --accent-soft: rgba(96, 165, 250, 0.15);
+  --accent-secondary: #fb923c;
+  --text: #f1f5f9;
   --muted: #94a3b8;
   --error: #f87171;
   --success: #4ade80;
-  font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --border: rgba(148, 163, 184, 0.2);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --input-bg: rgba(15, 23, 42, 0.8);
+  --card-hover-bg: rgba(51, 65, 85, 0.5);
+}
+
+/* Theme toggle button */
+#theme-toggle {
+  position: relative;
+}
+
+.theme-icon-light,
+.theme-icon-dark {
+  font-size: 1.1rem;
+}
+
+.theme-icon-dark {
+  display: none;
+}
+
+[data-theme="dark"] .theme-icon-light {
+  display: none;
+}
+
+[data-theme="dark"] .theme-icon-dark {
+  display: inline;
 }
 
 * {
@@ -17,18 +62,14 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top, rgba(100, 255, 218, 0.2), transparent 60%), var(--bg);
+  background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .noise-overlay {
-  position: fixed;
-  inset: 0;
-  background-image: url("https://www.transparenttextures.com/patterns/noise-pattern-with-subtle-cross-lines.png");
-  opacity: 0.04;
-  pointer-events: none;
-  mix-blend-mode: screen;
+  display: none;
 }
 
 a {
@@ -50,9 +91,10 @@ main {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: rgba(15, 23, 42, 0.8);
+  background: var(--card);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 3px var(--shadow);
 }
 
 .brand a {
@@ -69,7 +111,7 @@ nav {
 .btn {
   border: none;
   background: var(--accent);
-  color: #0f172a;
+  color: var(--bg);
   padding: 0.6rem 1.4rem;
   border-radius: 999px;
   font-weight: 600;
@@ -80,12 +122,17 @@ nav {
 
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 15px rgba(100, 255, 218, 0.25);
+  box-shadow: 0 8px 20px var(--shadow);
 }
 
 .btn.ghost {
   background: transparent;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn.ghost:hover {
+  border-color: var(--accent);
   color: var(--accent);
 }
 
@@ -101,8 +148,10 @@ nav {
 .user-chip {
   padding: 0.4rem 1rem;
   border-radius: 999px;
-  background: rgba(100, 255, 218, 0.12);
+  background: var(--accent-soft);
+  color: var(--accent);
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 footer {
@@ -116,10 +165,10 @@ footer {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
-  background: linear-gradient(135deg, rgba(100, 255, 218, 0.15), rgba(99, 102, 241, 0.2));
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(249, 115, 22, 0.08));
   padding: clamp(1.5rem, 5vw, 3rem);
   border-radius: 24px;
-  border: 1px solid rgba(100, 255, 218, 0.15);
+  border: 1px solid var(--border);
   margin-bottom: 2rem;
 }
 
@@ -140,21 +189,21 @@ footer {
 .detail-card,
 .review-card {
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: clamp(1.5rem, 5vw, 3rem);
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.5);
+  box-shadow: 0 4px 20px var(--shadow);
   margin-bottom: 2rem;
 }
 
 .filters-inline {
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 1rem 1.5rem;
   margin: 0 auto 1.5rem;
   max-width: 1200px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+  box-shadow: 0 2px 12px var(--shadow);
 }
 
 .filters-form {
@@ -168,12 +217,21 @@ footer {
 input,
 textarea {
   width: 100%;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border);
+  background: var(--input-bg);
   padding: 0.8rem 1rem;
   border-radius: 14px;
   color: var(--text);
   font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search input:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 label span,
@@ -196,8 +254,8 @@ label span,
 .tags-dropdown {
   width: 100%;
   min-width: 180px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border);
+  background: var(--input-bg);
   padding: 0.8rem 1rem;
   border-radius: 14px;
   color: var(--text);
@@ -208,7 +266,7 @@ label span,
 
 .tags-dropdown option {
   padding: 0.5rem;
-  background: var(--bg);
+  background: var(--card);
   color: var(--text);
 }
 
@@ -229,8 +287,8 @@ label span,
   justify-content: space-between;
   align-items: center;
   gap: 0.8rem;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border);
+  background: var(--input-bg);
   padding: 0.8rem 1rem;
   border-radius: 14px;
   color: var(--text);
@@ -272,7 +330,7 @@ label span,
   top: 100%;
   left: 0;
   right: 0;
-  background: rgba(15, 23, 42, 0.95);
+  background: var(--card);
   border: 1px solid var(--accent);
   border-top: none;
   border-bottom-left-radius: 14px;
@@ -280,6 +338,7 @@ label span,
   max-height: 250px;
   overflow-y: auto;
   z-index: 100;
+  box-shadow: 0 8px 20px var(--shadow);
 }
 
 .dropdown-menu.open {
@@ -290,7 +349,7 @@ label span,
   display: flex;
   gap: 0.5rem;
   padding: 0.6rem 0.8rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  border-bottom: 1px solid var(--border);
 }
 
 .dropdown-action {
@@ -298,7 +357,7 @@ label span,
   padding: 0.4rem 0.6rem;
   font-size: 0.8rem;
   background: transparent;
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--muted);
   cursor: pointer;
@@ -339,7 +398,7 @@ label span,
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid rgba(100, 255, 218, 0.15);
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 0.3rem 0.9rem;
   cursor: pointer;
@@ -396,25 +455,25 @@ label span,
 
 .film-card {
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.08);
+  border: 1px solid var(--border);
   border-radius: 24px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s ease, border 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
 }
 
 .film-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(100, 255, 218, 0.4);
+  box-shadow: 0 12px 30px var(--shadow);
 }
 
 .poster {
   padding-top: 140%;
   background-size: cover;
   background-position: center;
-  filter: saturate(1.2);
+  background-color: var(--border);
 }
 
 .film-info {
@@ -524,8 +583,8 @@ label span,
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(100, 255, 218, 0.9);
-  color: #0f172a;
+  background: var(--accent);
+  color: var(--bg);
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -533,7 +592,7 @@ label span,
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  box-shadow: 0 8px 20px rgba(100, 255, 218, 0.35);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 .page-header {
@@ -542,19 +601,21 @@ label span,
   align-items: flex-start;
   gap: 1.5rem;
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: clamp(1.5rem, 5vw, 3rem);
   margin-bottom: 2rem;
+  box-shadow: 0 2px 12px var(--shadow);
 }
 
 .chip-counter {
   align-self: center;
   padding: 0.5rem 1.2rem;
   border-radius: 999px;
-  background: rgba(100, 255, 218, 0.15);
-  border: 1px solid rgba(100, 255, 218, 0.3);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
   font-weight: 600;
+  color: var(--accent);
 }
 
 .error-page {
@@ -563,9 +624,10 @@ label span,
   gap: 1.5rem;
   align-items: center;
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: clamp(1.5rem, 5vw, 3rem);
+  box-shadow: 0 4px 20px var(--shadow);
 }
 
 .error-page.column {
@@ -596,8 +658,8 @@ label span,
   height: 220px;
   object-fit: cover;
   border-radius: 18px;
-  border: 1px dashed rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.6);
+  border: 1px dashed var(--border);
+  background: var(--card-hover-bg);
 }
 
 .error-copy {
@@ -657,16 +719,17 @@ label span,
 }
 
 .comments {
-  background: var(--card-strong);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: clamp(1.5rem, 5vw, 3rem);
   max-height: 600px;
   overflow-y: auto;
+  box-shadow: 0 2px 12px var(--shadow);
 }
 
 .comment {
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  border-bottom: 1px solid var(--border);
   padding: 0.9rem 0;
 }
 
@@ -731,7 +794,7 @@ label span,
 
 .tmdb-nav .btn.active {
   background: var(--accent);
-  color: #0f172a;
+  color: var(--bg);
 }
 
 .tmdb-search-form {
@@ -760,17 +823,17 @@ label span,
 
 .tmdb-card {
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.08);
+  border: 1px solid var(--border);
   border-radius: 18px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s ease, border 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .tmdb-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(100, 255, 218, 0.3);
+  box-shadow: 0 12px 30px var(--shadow);
 }
 
 .tmdb-card.exists {
@@ -784,7 +847,7 @@ label span,
 .tmdb-poster {
   position: relative;
   height: 300px;
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--border);
 }
 
 .tmdb-poster img {
@@ -806,11 +869,13 @@ label span,
   position: absolute;
   top: 0.8rem;
   right: 0.8rem;
-  background: rgba(15, 23, 42, 0.9);
+  background: var(--card);
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 600;
+  color: var(--accent-secondary);
+  box-shadow: 0 2px 8px var(--shadow);
 }
 
 .tmdb-info {
@@ -914,17 +979,18 @@ label span,
   align-items: center;
   gap: 2rem;
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: 2rem;
   margin-bottom: 2rem;
+  box-shadow: 0 2px 12px var(--shadow);
 }
 
 .profil-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), rgba(99, 102, 241, 0.8));
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -951,10 +1017,11 @@ label span,
 
 .profil-stats {
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: 2rem;
   margin-bottom: 2rem;
+  box-shadow: 0 2px 12px var(--shadow);
 }
 
 .profil-stats h2 {
@@ -969,8 +1036,8 @@ label span,
 }
 
 .stat-card {
-  background: rgba(100, 255, 218, 0.08);
-  border: 1px solid rgba(100, 255, 218, 0.15);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(249, 115, 22, 0.06));
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 1.5rem;
   text-align: center;
@@ -1025,7 +1092,7 @@ label span,
 .rating-bar {
   flex: 1;
   height: 8px;
-  background: rgba(148, 163, 184, 0.2);
+  background: var(--border);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -1033,7 +1100,7 @@ label span,
 .genre-bar-fill,
 .rating-bar-fill {
   height: 100%;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -1048,10 +1115,11 @@ label span,
 
 .profil-section {
   background: var(--card);
-  border: 1px solid rgba(100, 255, 218, 0.1);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: 2rem;
   margin-bottom: 2rem;
+  box-shadow: 0 2px 12px var(--shadow);
 }
 
 .profil-section h2 {
@@ -1081,7 +1149,7 @@ label span,
   height: 200px;
   background-size: cover;
   background-position: center;
-  background-color: rgba(15, 23, 42, 0.5);
+  background-color: var(--border);
   border-radius: 12px;
   margin-bottom: 0.5rem;
 }
@@ -1122,8 +1190,8 @@ label span,
 
 .profil-search-form select {
   padding: 0.8rem 1rem;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border);
+  background: var(--input-bg);
   border-radius: 14px;
   color: var(--text);
   font-size: 1rem;
@@ -1139,15 +1207,16 @@ label span,
 .profil-review-card {
   display: flex;
   gap: 1rem;
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(100, 255, 218, 0.08);
+  background: var(--card-hover-bg);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1rem;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profil-review-card:hover {
-  border-color: rgba(100, 255, 218, 0.3);
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 .profil-review-poster {
@@ -1155,7 +1224,7 @@ label span,
   height: 120px;
   background-size: cover;
   background-position: center;
-  background-color: rgba(15, 23, 42, 0.5);
+  background-color: var(--border);
   border-radius: 8px;
   flex-shrink: 0;
 }
@@ -1184,7 +1253,7 @@ label span,
 }
 
 .profil-review-rating {
-  color: var(--accent);
+  color: var(--accent-secondary);
   font-weight: 600;
   flex-shrink: 0;
 }
