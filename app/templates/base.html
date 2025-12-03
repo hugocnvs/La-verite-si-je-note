@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
     {% block extra_head %}{% endblock %}
 </head>
+
 <body>
     <div class="noise-overlay"></div>
     <header class="app-header">
@@ -18,25 +20,26 @@
         </div>
         <nav>
             {% if current_user %}
-                <a class="btn ghost" href="/watchlist">Ma watchlist ({{ watchlist|length }})</a>
-                <span class="user-chip">Connecté en tant que {{ current_user.username }}</span>
-                <form action="/logout" method="post">
-                    <button type="submit" class="btn ghost">Se déconnecter</button>
-                </form>
+            <a class="btn ghost" href="/tmdb/search">+ Ajouter un film</a>
+            <a class="btn ghost" href="/watchlist">Ma watchlist ({{ watchlist|length }})</a>
+            <span class="user-chip">Connecté en tant que {{ current_user.username }}</span>
+            <form action="/logout" method="post">
+                <button type="submit" class="btn ghost">Se déconnecter</button>
+            </form>
             {% else %}
-                <a class="btn ghost" href="/login">Connexion</a>
-                <a class="btn" href="/register">Inscription</a>
+            <a class="btn ghost" href="/login">Connexion</a>
+            <a class="btn" href="/register">Inscription</a>
             {% endif %}
         </nav>
     </header>
 
     <main>
         {% if messages %}
-            <div class="flash-wrapper">
-                {% for msg in messages %}
-                    <div class="flash {{ msg.category }}">{{ msg.message }}</div>
-                {% endfor %}
-            </div>
+        <div class="flash-wrapper">
+            {% for msg in messages %}
+            <div class="flash {{ msg.category }}">{{ msg.message }}</div>
+            {% endfor %}
+        </div>
         {% endif %}
         {% block content %}{% endblock %}
     </main>
@@ -48,5 +51,5 @@
     <script src="{{ url_for('static', path='js/app.js') }}" defer></script>
     {% block extra_js %}{% endblock %}
 </body>
-</html>
 
+</html>

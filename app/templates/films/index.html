@@ -12,10 +12,11 @@
             <span>Tags</span>
             <div class="tags-scroll">
                 {% for tag in tags %}
-                    <label class="tag-option">
-                        <input type="checkbox" name="tags" value="{{ tag.name }}" {% if tag.name in selected_tags %}checked{% endif %}>
-                        <span>{{ tag.name }}</span>
-                    </label>
+                <label class="tag-option">
+                    <input type="checkbox" name="tags" value="{{ tag.name }}" {% if tag.name in selected_tags
+                        %}checked{% endif %}>
+                    <span>{{ tag.name }}</span>
+                </label>
                 {% endfor %}
             </div>
         </div>
@@ -30,4 +31,3 @@
     {% include "films/_cards.html" %}
 </section>
 {% endblock %}
-

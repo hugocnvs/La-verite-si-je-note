@@ -13,7 +13,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from .config import get_settings
 from .database import engine, init_db
 from .models import User
-from .routers import auth, films, watchlist
+from .routers import auth, films, watchlist, tmdb
 from .services.watchlist import fetch_watchlist
 from .web import template_context, templates
 
@@ -46,6 +46,7 @@ app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 app.include_router(auth.router)
 app.include_router(films.router)
 app.include_router(watchlist.router)
+app.include_router(tmdb.router)
 
 
 def _error_context(request: Request) -> Dict[str, Any]:

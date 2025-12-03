@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Ajouter un film{% endblock %}
+
+{% block content %}
+<section class="filters-inline">
+    <form method="get" class="filters-form" id="filters-form">
+        <label class="search">
+            <span>Rechercher un film sur TMDb</span>
+            <input type="text" name="q" value="{{ query }}"
+                placeholder="Tapez le nom d'un film (ex: Inception, Matrix...)" autofocus>
+        </label>
+        <div class="filter-actions">
+            <button type="submit" class="btn">Rechercher</button>
+            <a href="/tmdb/search" class="btn ghost">Réinitialiser</a>
+        </div>
+    </form>
+</section>
+
+{% if results %}
+<div class="tmdb-results-info">
+    <span>{{ total_results }} résultat(s) pour « {{ query }} »</span>
+</div>
+
+<section class="grid" id="films-grid">
+    {% for movie in results %}
+    <article class="film-card {% if movie.already_exists %}exists{% endif %}">
+        {% if movie.already_exists %}
+        <a href="/films/{{ movie.local_id }}">
+            {% endif %}
+            <div class="poster" style="background-image: url('{{ movie.poster_url or '' }}');"></div>
+            {% if movie.vote_average %}
+            <span class="watchlist-badge">{{ "%.1f"|format(movie.vote_average) }}</span>
+            {% endif %}
+            {% if movie.already_exists %}
+        </a>
+        {% endif %}
+        <div class="film-info">
+            <div class="film-head">
+                <div>
+                    <h2>{{ movie.title }}</h2>
+                    {% if movie.release_year %}<p class="subtle">{{ movie.release_year }}</p>{% endif %}
+                </div>
+                <div class="rating">
+                    {% if movie.vote_average %}
+                    <span>{{ "%.1f"|format(movie.vote_average) }} ★</span>
+                    <small>TMDb</small>
+                    {% else %}
+                    <span class="muted">Pas de note</span>
+                    {% endif %}
+                </div>
+            </div>
+            <p class="overview">{{ movie.overview[:120] if movie.overview else "Aucun synopsis disponible." }}{% if
+                movie.overview and movie.overview|length > 120 %}...{% endif %}</p>
+            <div class="tmdb-card-actions">
+                {% if movie.already_exists %}
+                <a href="/films/{{ movie.local_id }}" class="btn ghost slim">Déjà ajouté · Voir</a>
+                {% else %}
+                <form method="post" action="/tmdb/import/{{ movie.tmdb_id }}">
+                    <button type="submit" class="btn slim">+ Ajouter</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+</section>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if current_page > 1 %}
+    <a href="?q={{ query }}&page={{ current_page - 1 }}" class="btn ghost">← Précédent</a>
+    {% endif %}
+    <span class="page-info">Page {{ current_page }} / {{ total_pages }}</span>
+    {% if current_page < total_pages %} <a href="?q={{ query }}&page={{ current_page + 1 }}" class="btn ghost">Suivant
+        →</a>
+        {% endif %}
+</div>
+{% endif %}
+
+{% elif query %}
+<div class="empty-state">
+    <p>Aucun film trouvé pour « {{ query }} »</p>
+    <p class="hint">Essayez avec un autre titre ou vérifiez l'orthographe</p>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <p>🔍 Entrez le nom d'un film pour le rechercher sur TMDb</p>
+    <p class="hint">Vous pourrez ensuite l'ajouter à votre catalogue en un clic</p>
+</div>
+{% endif %}
+{% endblock %}
