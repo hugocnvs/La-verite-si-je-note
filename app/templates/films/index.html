@@ -47,4 +47,82 @@
 <section class="grid" id="films-grid">
     {% include "films/_cards.html" %}
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Use event delegation for better performance and to handle dynamic content if any
+        document.getElementById('films-grid').addEventListener('submit', async (e) => {
+            if (e.target.matches('.watchlist-toggle-form')) {
+                e.preventDefault();
+                const form = e.target;
+                const btn = form.querySelector('button');
+                const originalText = btn.innerText;
+                const card = form.closest('.film-card');
+
+                // Disable button
+                btn.disabled = true;
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            // Update UI based on action
+                            if (data.action === 'added') {
+                                btn.innerText = 'Retirer';
+                                btn.classList.add('ghost');
+                                card.classList.add('is-watchlisted');
+
+                                // Add badge if not present
+                                if (!card.querySelector('.watchlist-badge')) {
+                                    const link = card.querySelector('a');
+                                    const badge = document.createElement('span');
+                                    badge.className = 'watchlist-badge';
+                                    badge.innerText = '★';
+                                    link.appendChild(badge);
+                                }
+                            } else {
+                                btn.innerText = '+ Ajouter';
+                                btn.classList.remove('ghost');
+                                card.classList.remove('is-watchlisted');
+
+                                // Remove badge
+                                const badge = card.querySelector('.watchlist-badge');
+                                if (badge) badge.remove();
+                            }
+
+                            // Update header counter
+                            const headerLink = document.querySelector('nav a[href="/watchlist"]');
+                            if (headerLink) {
+                                const match = headerLink.innerText.match(/\((\d+)\)/);
+                                if (match) {
+                                    let count = parseInt(match[1]);
+                                    if (data.action === 'added') {
+                                        count++;
+                                    } else {
+                                        count = Math.max(0, count - 1);
+                                    }
+                                    headerLink.innerText = `Ma watchlist (${count})`;
+                                }
+                            }
+                        }
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Une erreur est survenue lors de la mise à jour de votre watchlist.');
+                } finally {
+                    btn.disabled = false;
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

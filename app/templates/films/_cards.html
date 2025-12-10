@@ -1,39 +1,51 @@
 {% if not films %}
-    <div class="empty-state">
-        <p>Aucun film ne correspond à votre recherche pour le moment.</p>
-    </div>
+<div class="empty-state">
+    <p>Aucun film ne correspond à votre recherche pour le moment.</p>
+</div>
 {% endif %}
 {% for item in films %}
-    {% set film = item.film %}
-    <article class="film-card {% if item.in_watchlist %}is-watchlisted{% endif %}">
-        <a href="/films/{{ film.id }}">
-            <div class="poster" style="background-image: url('{{ film.poster_url or '' }}');"></div>
-            {% if item.in_watchlist %}
-                <span class="watchlist-badge">★</span>
-            {% endif %}
-        </a>
-        <div class="film-info">
-            <div class="film-head">
-                <div>
-                    <h2>{{ film.title }}</h2>
-                    {% if film.release_year %}<p class="subtle">{{ film.release_year }}</p>{% endif %}
-                </div>
-                <div class="rating">
-                    {% if item.avg_rating %}
-                        <span>{{ item.avg_rating }} ★</span>
-                        <small>{{ item.review_count }} avis</small>
-                    {% else %}
-                        <span class="muted">Pas encore de note</span>
-                    {% endif %}
-                </div>
+{% set film = item.film %}
+<article class="film-card {% if item.in_watchlist %}is-watchlisted{% endif %}">
+    <a href="/films/{{ film.id }}">
+        <div class="poster" style="background-image: url('{{ film.poster_url or '' }}');"></div>
+        {% if item.in_watchlist %}
+        <span class="watchlist-badge">★</span>
+        {% endif %}
+    </a>
+    <div class="film-info">
+        <div class="film-head">
+            <div>
+                <h2>{{ film.title }}</h2>
+                {% if film.release_year %}<p class="subtle">{{ film.release_year }}</p>{% endif %}
             </div>
-            <p class="overview">{{ film.overview or "Aucun synopsis enregistré pour le moment." }}</p>
-            <div class="tags">
-                {% for tag in film.tags %}
-                    <span>{{ tag.name }}</span>
-                {% endfor %}
+            <div class="rating">
+                {% if item.avg_rating %}
+                <span>{{ item.avg_rating }} ★</span>
+                <small>{{ item.review_count }} avis</small>
+                {% else %}
+                <span class="muted">Pas encore de note</span>
+                {% endif %}
             </div>
         </div>
-    </article>
+        <p class="overview">{{ film.overview or "Aucun synopsis enregistré pour le moment." }}</p>
+        <div class="card-footer">
+            <div class="tags">
+                {% for tag in film.tags %}
+                <span>{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            <div class="tmdb-card-actions">
+                <form method="post" action="/films/{{ film.id }}/watchlist" class="watchlist-toggle-form">
+                    <button type="submit" class="btn slim {% if item.in_watchlist %}ghost{% endif %}">
+                        {% if item.in_watchlist %}
+                        Retirer
+                        {% else %}
+                        + Ajouter
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</article>
 {% endfor %}
-

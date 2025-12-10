@@ -445,6 +445,7 @@ label span,
 }
 
 @media (max-width: 640px) {
+
   .grid,
   .grid.grid-compact,
   .watchlist-grid {
@@ -481,6 +482,11 @@ label span,
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  flex: 1;
+}
+
+.card-footer {
+  margin-top: auto;
 }
 
 .film-head {
@@ -511,6 +517,7 @@ label span,
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  margin-top: 0.8rem;
 }
 
 .tags span {
@@ -949,6 +956,7 @@ label span,
 /* TMDb card actions */
 .tmdb-card-actions {
   margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
 }
 
 .tmdb-card-actions form {
@@ -1357,4 +1365,3 @@ label span,
 .btn-remove .icon {
   font-size: 0.9rem;
 }
-

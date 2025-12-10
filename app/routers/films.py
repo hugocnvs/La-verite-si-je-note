@@ -220,13 +220,13 @@ def submit_review(
     )
 
 
-@router.post("/{film_id}/watchlist")
+@router.post("/{film_id}/watchlist", response_model=None)
 def toggle_watchlist(
     film_id: int,
     request: Request,
     session: Session = Depends(get_session),
     current_user: User = Depends(require_user),
-) -> RedirectResponse:
+) -> RedirectResponse | dict:
     """Ajoute ou retire un film de la watchlist."""
     film = session.get(Film, film_id)
     if not film:
@@ -238,6 +238,7 @@ def toggle_watchlist(
         )
     ).first()
 
+    action = "removed"
     if item:
         session.delete(item)
         flash(request, f"{film.title} a été retiré de votre watchlist.", "info")
@@ -245,7 +246,13 @@ def toggle_watchlist(
         item = WatchlistItem(user_id=current_user.id, film_id=film_id)
         session.add(item)
         flash(request, f"{film.title} a été ajouté à votre watchlist.", "success")
+        action = "added"
 
     session.commit()
+
+    # Support AJAX requests
+    if request.headers.get("accept") == "application/json":
+        return {"success": True, "action": action, "film_id": film_id}
+
     return RedirectResponse(url=f"/films/{film_id}", status_code=status.HTTP_303_SEE_OTHER)
 
