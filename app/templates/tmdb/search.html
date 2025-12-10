@@ -89,4 +89,59 @@
     <p class="hint">Vous pourrez ensuite l'ajouter à votre catalogue en un clic</p>
 </div>
 {% endif %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const forms = document.querySelectorAll('.tmdb-card-actions form');
+
+        forms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('button');
+                const originalText = btn.innerText;
+
+                // Disable button and show loading state
+                btn.disabled = true;
+                btn.innerText = 'Ajout...';
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Create the "Already added" link
+                        const link = document.createElement('a');
+                        link.href = `/films/${data.local_id}`;
+                        link.className = 'btn ghost slim';
+                        link.innerText = 'Déjà ajouté · Voir';
+
+                        // Replace form with link
+                        form.replaceWith(link);
+
+                        // Mark card as existing (optional, for styling)
+                        const card = link.closest('.film-card');
+                        if (card) card.classList.add('exists');
+
+                    } else {
+                        // Revert button on error
+                        btn.disabled = false;
+                        btn.innerText = originalText;
+                        alert('Erreur: ' + (data.message || 'Une erreur est survenue'));
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                    alert('Une erreur réseau est survenue');
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

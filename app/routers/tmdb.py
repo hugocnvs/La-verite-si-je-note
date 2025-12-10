@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request, status
-from fastapi.responses import RedirectResponse
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request, status, Header, Response
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlmodel import Session, select
 
 from ..database import get_session
@@ -131,7 +132,8 @@ def import_from_tmdb(
     request: Request,
     session: Session = Depends(get_session),
     current_user: User = Depends(require_user),
-) -> RedirectResponse:
+    accept: str | None = Header(default=None),
+) -> Response:
     """Importe un film depuis TMDb vers la base locale."""
     try:
         details = get_movie_details(tmdb_id)
@@ -143,7 +145,14 @@ def import_from_tmdb(
         ).first()
         
         if existing:
-            flash(request, f"« {film_data['title']} » existe déjà dans la base.", "info")
+            msg = f"« {film_data['title']} » existe déjà dans la base."
+            if accept == "application/json":
+                 return JSONResponse(
+                     content={"success": True, "local_id": existing.id, "title": existing.title, "message": msg, "already_exists": True},
+                     status_code=200
+                 )
+            
+            flash(request, msg, "info")
             return RedirectResponse(
                 url=f"/films/{existing.id}",
                 status_code=status.HTTP_303_SEE_OTHER,
@@ -160,12 +169,24 @@ def import_from_tmdb(
         session.refresh(film)
         
         flash(request, f"« {film.title} » a été ajouté avec succès !", "success")
+        
+        if accept == "application/json":
+             return JSONResponse(
+                 content={"success": True, "local_id": film.id, "title": film.title, "message": f"« {film.title} » ajouté !"},
+                 status_code=200
+             )
+
         return RedirectResponse(
             url=f"/films/{film.id}",
             status_code=status.HTTP_303_SEE_OTHER,
         )
     
     except Exception as e:
+        if accept == "application/json":
+             return JSONResponse(
+                 content={"success": False, "message": str(e)},
+                 status_code=400
+             )
         flash(request, f"Erreur lors de l'import: {e}", "error")
         return RedirectResponse(
             url="/tmdb/search",
