@@ -73,6 +73,12 @@ python scripts/fetch_from_tmdb.py --popular --limit 20
 
 # Lancer le serveur
 uvicorn app.main:app --reload
+
+# Documentation interactive (Swagger UI)
+# Accessible via :
+#  - Swagger UI: http://127.0.0.1:8000/docs
+#  - ReDoc: http://127.0.0.1:8000/redoc
+#  - OpenAPI JSON: http://127.0.0.1:8000/openapi.json
 ```
 
 Ensuite, rendez-vous sur `http://127.0.0.1:8000/` (redirection vers `/films`).

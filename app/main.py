@@ -19,7 +19,13 @@ from .web import template_context, templates
 
 
 settings = get_settings()
-app = FastAPI(title=settings.app_name)
+# Active explicit documentation routes for Swagger UI and ReDoc
+app = FastAPI(
+    title=settings.app_name,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
+)
 
 
 @app.on_event("startup")
@@ -48,6 +54,19 @@ app.include_router(films.router)
 app.include_router(watchlist.router)
 app.include_router(tmdb.router)
 app.include_router(profil.router)
+
+
+@app.get("/{prefix}/docs", include_in_schema=False)
+def redirect_docs_prefix(prefix: str):
+    """Catch /something/docs and redirect to /docs to avoid path param parsing errors.
+    Example: /films/docs -> /docs
+    """
+    return RedirectResponse(url="/docs")
+
+
+@app.get("/{prefix}/redoc", include_in_schema=False)
+def redirect_redoc_prefix(prefix: str):
+    return RedirectResponse(url="/redoc")
 
 
 def _error_context(request: Request) -> Dict[str, Any]:

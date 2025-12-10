@@ -21,6 +21,18 @@ from ..web import template_context, templates
 router = APIRouter(prefix="/films", tags=["films"])
 
 
+@router.get("/docs", include_in_schema=False)
+def redirect_docs() -> RedirectResponse:
+    """Redirige `/films/docs` vers la vraie Swagger UI `/docs`. Evite l'erreur de parsing du film_id."""
+    return RedirectResponse(url="/docs")
+
+
+@router.get("/redoc", include_in_schema=False)
+def redirect_redoc() -> RedirectResponse:
+    """Redirige `/films/redoc` vers `/redoc` (ReDoc)."""
+    return RedirectResponse(url="/redoc")
+
+
 def _apply_filters(statement, q: Optional[str], tags: List[str]):
     if q:
         like = f"%{q.lower()}%"

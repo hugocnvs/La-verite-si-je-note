@@ -31,12 +31,14 @@
             {% if current_user %}
             <a class="btn ghost" href="/tmdb/search">+ Ajouter un film</a>
             <a class="btn ghost" href="/watchlist">Ma watchlist ({{ watchlist|length }})</a>
+            <a class="btn ghost" href="/docs">API Docs</a>
             <a class="btn ghost icon-btn" href="/profil" title="Mon profil">👤</a>
             <form action="/logout" method="post">
                 <button type="submit" class="btn ghost">Se déconnecter</button>
             </form>
             {% else %}
             <a class="btn ghost" href="/login">Connexion</a>
+            <a class="btn ghost" href="/docs">API Docs</a>
             <a class="btn" href="/register">Inscription</a>
             {% endif %}
             <button id="theme-toggle" class="btn ghost icon-btn" title="Changer le thème">
