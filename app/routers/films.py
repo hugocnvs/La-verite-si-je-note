@@ -192,6 +192,16 @@ def submit_review(
         session.add(review)
         flash(request, "Merci pour votre avis !", "success")
 
+    # Auto-remove from watchlist if present
+    watchlist_item = session.exec(
+        select(WatchlistItem).where(
+            (WatchlistItem.user_id == current_user.id) & (WatchlistItem.film_id == film_id)
+        )
+    ).first()
+    if watchlist_item:
+        session.delete(watchlist_item)
+        flash(request, f"{film.title} a été retiré de votre watchlist.", "info")
+
     session.commit()
     return RedirectResponse(
         url=f"/films/{film_id}", status_code=status.HTTP_303_SEE_OTHER

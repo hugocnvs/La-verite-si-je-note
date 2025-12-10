@@ -1276,3 +1276,85 @@ label span,
   margin-top: auto;
 }
 
+/* Watchlist controls and styles */
+.watchlist-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.sort-form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sort-form label {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.sort-form select {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sort-form select:hover {
+  border-color: var(--accent);
+}
+
+.sort-form select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.watchlist-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.added-date {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.remove-form {
+  margin: 0;
+}
+
+.btn-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--error);
+  background: transparent;
+  border: 1px solid var(--error);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-remove:hover {
+  background: var(--error);
+  color: #fff;
+}
+
+.btn-remove .icon {
+  font-size: 0.9rem;
+}
+
