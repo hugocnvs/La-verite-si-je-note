@@ -116,19 +116,19 @@ Schéma relationnel complet avec clés primaires, étrangères, contraintes d'un
 
 ### Flux d'Authentification
 
-![Flux d'Authentification](img/flux-authentification.png)
+[🔍 Voir le diagramme en détail](img/flux-authentification.png)
 
 Séquence d'inscription et de connexion : hachage bcrypt, validation, création de session signée.
 
 ### Flux de Recherche et Filtrage
 
-![Flux de Recherche et Filtrage](img/flux-recherche-filtrage.png)
+[🔍 Voir le diagramme en détail](img/flux-recherche-filtrage.png)
 
 Interaction temps réel : debounce, requêtes AJAX, filtrage SQL avec ILIKE et JOIN sur les tags.
 
 ### Import depuis TMDb
 
-![Flux Import TMDb](img/flux-import-tmdb.png)
+[🔍 Voir le diagramme en détail](img/flux-import-tmdb.png)
 
 États et transitions lors de la recherche et de l'import de films depuis The Movie Database API.
 
