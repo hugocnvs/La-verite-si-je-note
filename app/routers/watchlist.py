@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query, Request, status
 from fastapi.responses import RedirectResponse
-from sqlmodel import Session, select
+from sqlmodel import Session, select, delete
 
 from ..database import get_session
 from ..dependencies import require_user
@@ -85,5 +85,20 @@ def remove_from_watchlist(
         session.commit()
         flash(request, f"{film.title} a été retiré de votre watchlist.", "info")
     
+    return RedirectResponse(url="/watchlist", status_code=status.HTTP_303_SEE_OTHER)
+
+
+@router.post("/watchlist/clear")
+def clear_watchlist(
+    request: Request,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(require_user),
+) -> RedirectResponse:
+    """Vide entièrement la watchlist de l'utilisateur."""
+    statement = delete(WatchlistItem).where(WatchlistItem.user_id == current_user.id)
+    session.exec(statement)
+    session.commit()
+    
+    flash(request, "Votre watchlist a été entièrement vidée.", "info")
     return RedirectResponse(url="/watchlist", status_code=status.HTTP_303_SEE_OTHER)
 

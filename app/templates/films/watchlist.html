@@ -7,7 +7,8 @@
         <p class="eyebrow">Séances privées</p>
         <h1>Ma watchlist</h1>
         <p class="lead">
-            Tous les films que vous avez mis de côté pour les savourer plus tard. Cliquez sur une carte pour revenir au détail ou gérez vos ajouts depuis la fiche film.
+            Tous les films que vous avez mis de côté pour les savourer plus tard. Cliquez sur une carte pour revenir au
+            détail ou gérez vos ajouts depuis la fiche film.
         </p>
     </div>
     <div class="chip-counter">
@@ -20,60 +21,65 @@
     <form method="get" action="/watchlist" class="sort-form">
         <label for="sort">Trier par :</label>
         <select name="sort" id="sort" onchange="this.form.submit()">
-            <option value="date" {% if current_sort == 'date' %}selected{% endif %}>Date d'ajout</option>
-            <option value="title" {% if current_sort == 'title' %}selected{% endif %}>Titre</option>
-            <option value="year" {% if current_sort == 'year' %}selected{% endif %}>Année</option>
-            <option value="genre" {% if current_sort == 'genre' %}selected{% endif %}>Genre</option>
+            <option value="date" {% if current_sort=='date' %}selected{% endif %}>Date d'ajout</option>
+            <option value="title" {% if current_sort=='title' %}selected{% endif %}>Titre</option>
+            <option value="year" {% if current_sort=='year' %}selected{% endif %}>Année</option>
+            <option value="genre" {% if current_sort=='genre' %}selected{% endif %}>Genre</option>
         </select>
+    </form>
+    <form method="post" action="/watchlist/clear" style="margin-left: auto;">
+        <button type="submit" class="btn ghost danger"
+            onclick="return confirm('Voulez-vous vraiment vider toute votre watchlist ? Cette action est irréversible.')">
+            Tout supprimer
+        </button>
     </form>
 </section>
 {% endif %}
 
 <section class="grid watchlist-grid">
     {% if not films %}
-        <div class="empty-state">
-            <p>Votre watchlist est vide. Ajoutez un film depuis sa page pour le retrouver ici.</p>
-        </div>
+    <div class="empty-state">
+        <p>Votre watchlist est vide. Ajoutez un film depuis sa page pour le retrouver ici.</p>
+    </div>
     {% else %}
-        {% for item in films %}
-            {% set film = item.film %}
-            <article class="film-card is-watchlisted">
-                <a href="/films/{{ film.id }}">
-                    <div class="poster" style="background-image: url('{{ film.poster_url or '' }}');"></div>
-                    <span class="watchlist-badge">★</span>
-                </a>
-                <div class="film-info">
-                    <div class="film-head">
-                        <div>
-                            <h2>{{ film.title }}</h2>
-                            {% if film.release_year %}<p class="subtle">{{ film.release_year }}</p>{% endif %}
-                        </div>
-                        <div class="rating">
-                            {% if item.avg_rating %}
-                                <span>{{ item.avg_rating }} ★</span>
-                                <small>{{ item.review_count }} avis</small>
-                            {% else %}
-                                <span class="muted">Pas encore de note</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="tags">
-                        {% for tag in film.tags %}
-                            <span>{{ tag.name }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="watchlist-meta">
-                        <small class="added-date">Ajouté le {{ item.added_at.strftime('%d/%m/%Y') }}</small>
-                        <form method="post" action="/watchlist/{{ film.id }}/remove" class="remove-form">
-                            <button type="submit" class="btn-remove" title="Retirer de la watchlist">
-                                <span class="icon">✕</span> Retirer
-                            </button>
-                        </form>
-                    </div>
+    {% for item in films %}
+    {% set film = item.film %}
+    <article class="film-card is-watchlisted">
+        <a href="/films/{{ film.id }}">
+            <div class="poster" style="background-image: url('{{ film.poster_url or '' }}');"></div>
+            <span class="watchlist-badge">★</span>
+        </a>
+        <div class="film-info">
+            <div class="film-head">
+                <div>
+                    <h2>{{ film.title }}</h2>
+                    {% if film.release_year %}<p class="subtle">{{ film.release_year }}</p>{% endif %}
                 </div>
-            </article>
-        {% endfor %}
+                <div class="rating">
+                    {% if item.avg_rating %}
+                    <span>{{ item.avg_rating }} ★</span>
+                    <small>{{ item.review_count }} avis</small>
+                    {% else %}
+                    <span class="muted">Pas encore de note</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="tags">
+                {% for tag in film.tags %}
+                <span>{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            <div class="watchlist-meta">
+                <small class="added-date">Ajouté le {{ item.added_at.strftime('%d/%m/%Y') }}</small>
+                <form method="post" action="/watchlist/{{ film.id }}/remove" class="remove-form">
+                    <button type="submit" class="btn-remove" title="Retirer de la watchlist">
+                        <span class="icon">✕</span> Retirer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
     {% endif %}
 </section>
 {% endblock %}
-
