@@ -4,6 +4,19 @@
 
 Plateforme FastAPI complète pour explorer des films, filtrer par tags, laisser des commentaires notés sur 5 et gérer une watchlist personnelle. L'interface propose un thème clair/sombre moderne, responsive et dynamique.
 
+| Besoin d'un client | Implémentation pour répondre au besoin |
+| :--- | :--- |
+| S'inscrire, se connecter et rester identifié de manière sécurisée. | **Authentification sécurisée** : inscription, connexion, déconnexion via sessions signées. |
+| Trouver facilement des films grâce à la recherche et aux filtres. | **Grille interactive** : recherche plein texte + filtres multi-tags avec dropdown et rendu en cartes animées. |
+| Consulter les détails d'un film, la note moyenne et les avis des autres utilisateurs. | **Page de détail** : fiche film, moyenne des notes, commentaires triés, formulaire d'avis. |
+| Publier son propre avis (note et texte) et pouvoir le modifier. | **Avis éditables** : chaque utilisateur connecté peut créer ou modifier son retour (note sur 5 + texte). |
+| Gérer une liste personnelle de films à voir plus tard. | **Watchlist** : liste de films à voir, ajout/suppression en un clic. |
+| Visualiser ses statistiques personnelles et son historique d'activité. | **Profil utilisateur** : statistiques personnelles (films vus, temps de visionnage, note moyenne, genres préférés), coups de cœur, déceptions et historique complet. |
+| Intégrer des films externes pour enrichir la base de données. | **Intégration TMDb** : recherche et import de films depuis The Movie Database. |
+| Choisir entre un affichage clair ou sombre. | **Mode clair/sombre** : bascule entre thème jour et nuit, persisté en local. |
+| Permettre la consultation du catalogue et des avis aux utilisateurs non connectés. | **Visiteurs** : consultation libre des films/avis sans possibilité de poster. |
+| Peupler facilement la base de données en masse. | **Import auto** : scripts pour remplir la base depuis SampleAPIs ou TMDb. |
+
 ## Fonctionnalités
 
 - **Authentification sécurisée** : inscription, connexion, déconnexion via sessions signées.
