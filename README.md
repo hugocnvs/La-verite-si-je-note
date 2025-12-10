@@ -20,7 +20,7 @@ Plateforme FastAPI complète pour explorer des films, filtrer par tags, laisser 
 ## Fonctionnalités
 
 - **Authentification sécurisée** : inscription, connexion, déconnexion via sessions signées.
-- **Grille interactive** : recherche plein texte + filtres multi-tags avec dropdown et rendu en cartes animées.
+- **Grille interactive** : recherche texte + filtres et rendu en cartes animées.
 - **Page de détail** : fiche film, moyenne des notes, commentaires triés, formulaire d'avis.
 - **Avis éditables** : chaque utilisateur connecté peut créer ou modifier son retour (note sur 5 + texte).
 - **Watchlist** : liste de films à voir, ajout/suppression en un clic.
