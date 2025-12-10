@@ -92,3 +92,54 @@ TMDB_API_KEY=votre_clé_api
 ```
 
 Obtenez une clé gratuite sur [themoviedb.org](https://www.themoviedb.org/settings/api).
+
+---
+
+## Architecture & Diagrammes
+
+### Architecture Globale
+
+![Architecture Globale](img/architecture-globale.png)
+
+Vue d'ensemble du système : interactions entre le frontend (navigateur), le backend FastAPI (routers), et la couche données (SQLite + APIs externes).
+
+### Modèle de Données
+
+![Modèle de Données](img/modele-donnees.png)
+
+Schéma relationnel complet avec clés primaires, étrangères, contraintes d'unicité et index pour optimiser les performances.
+
+**Optimisations clés :**
+- Index sur `username`, `email`, `title`, `release_year`, `director`, `country`, `rating`
+- Contraintes UNIQUE pour éviter les doublons (user, film externe, tags, reviews)
+- FK indexées pour les jointures rapides
+
+### Flux d'Authentification
+
+![Flux d'Authentification](img/flux-authentification.png)
+
+Séquence d'inscription et de connexion : hachage bcrypt, validation, création de session signée.
+
+### Flux de Recherche et Filtrage
+
+![Flux de Recherche et Filtrage](img/flux-recherche-filtrage.png)
+
+Interaction temps réel : debounce, requêtes AJAX, filtrage SQL avec ILIKE et JOIN sur les tags.
+
+### Import depuis TMDb
+
+![Flux Import TMDb](img/flux-import-tmdb.png)
+
+États et transitions lors de la recherche et de l'import de films depuis The Movie Database API.
+
+### Calcul des Statistiques Profil
+
+![Calcul Statistiques](img/calcul-statistiques.png)
+
+Agrégations et calculs pour générer les statistiques utilisateur : films vus, temps total, genres préférés, distribution des notes.
+
+### Système de Thème Clair/Sombre
+
+![Thème Clair/Sombre](img/theme-clair-sombre.png)
+
+Détection automatique du thème OS, persistance localStorage, bascule dynamique via CSS variables.
