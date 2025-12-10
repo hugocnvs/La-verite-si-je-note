@@ -26,9 +26,11 @@
     <header class="app-header">
         <div class="brand">
             <a href="/films">{{ settings.app_name }}</a>
+            <p class="brand-slogan">Ce soir on note un film pas un con</p>
         </div>
         <nav>
             {% if current_user %}
+            <a class="btn ghost" href="/">Accueil</a>
             <a class="btn ghost" href="/tmdb/search">+ Ajouter un film</a>
             <a class="btn ghost" href="/watchlist">Ma watchlist ({{ watchlist|length }})</a>
             <a class="btn ghost" href="/docs">API Docs</a>
@@ -37,9 +39,9 @@
                 <button type="submit" class="btn ghost">Se déconnecter</button>
             </form>
             {% else %}
-            <a class="btn ghost" href="/login">Connexion</a>
+            <a class="btn ghost" href="/">Accueil</a>
+            <a class="btn" href="/login">Connexion / Inscription</a>
             <a class="btn ghost" href="/docs">API Docs</a>
-            <a class="btn" href="/register">Inscription</a>
             {% endif %}
             <button id="theme-toggle" class="btn ghost icon-btn" title="Changer le thème">
                 <span class="theme-icon-light">☀️</span>

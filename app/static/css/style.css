@@ -102,6 +102,19 @@ main {
   font-size: 1.2rem;
 }
 
+.brand {
+  display: flex;
+  gap: 0.15rem;
+  align-items: flex-start;
+}
+
+.brand-slogan {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1;
+}
+
 nav {
   display: flex;
   gap: 1rem;

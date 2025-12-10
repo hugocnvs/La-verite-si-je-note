@@ -225,12 +225,16 @@ def toggle_watchlist(
     film_id: int,
     request: Request,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_user),
+    current_user: User | None = Depends(get_current_user),
 ) -> RedirectResponse | dict:
     """Ajoute ou retire un film de la watchlist."""
     film = session.get(Film, film_id)
     if not film:
         raise HTTPException(status_code=404, detail="Film introuvable.")
+
+    if not current_user:
+        flash(request, "Connectez-vous pour gérer votre watchlist.", "error")
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
 
     item = session.exec(
         select(WatchlistItem).where(
