@@ -56,7 +56,25 @@ scripts/
 data/                    # Base SQLite (créée au démarrage)
 ```
 
-## Installation & lancement
+## Démarrage rapide avec Docker 🐳
+
+1.  **Lancer l'application** :
+    ```bash
+    docker compose up -d --build
+    ```
+    L'application sera accessible sur `http://localhost/films`.
+
+2.  **Peupler la base de données** (optionnel, si la base est vide) :
+    ```bash
+    docker compose exec app python scripts/fetch_movies.py --limit 20
+    ```
+
+3.  **Arrêter l'application** :
+    ```bash
+    docker compose down
+    ```
+
+## Installation & lancement (sans Docker)
 
 ```bash
 python -m venv .venv
