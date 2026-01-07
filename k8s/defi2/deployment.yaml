@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: csc8567-web
+  namespace: u-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: csc8567-web
+  template:
+    metadata:
+      labels:
+        app: csc8567-web
+    spec:
+      containers:
+        - name: web
+          image: xhelozs/csc8567:v1
+          ports:
+            - containerPort: 5000
+              name: http
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: "200m"
+              memory: "200Mi"

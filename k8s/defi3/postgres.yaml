@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lvn-postgres
+  namespace: u-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lvn-postgres
+  template:
+    metadata:
+      labels:
+        app: lvn-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - name: pg
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: lvn-secrets
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: lvn-secrets
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: lvn-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lvn-secrets
+                  key: POSTGRES_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lvn-postgres
+  namespace: u-1
+spec:
+  type: ClusterIP
+  selector:
+    app: lvn-postgres
+  ports:
+    - name: pg
+      port: 5432
+      targetPort: pg

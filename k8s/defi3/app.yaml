@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lvn-app
+  namespace: u-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lvn-app
+  template:
+    metadata:
+      labels:
+        app: lvn-app
+    spec:
+      containers:
+        - name: app
+          image: lardet/la-verite-si-je-note:v3
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: lvn-secrets
+                  key: SECRET_KEY
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: lvn-secrets
+                  key: DATABASE_URL
+            - name: KUBE_PROXY_BASE_PATH
+              value: /api/v1/namespaces/u-1/services/lvn-app:http/proxy
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lvn-app
+  namespace: u-1
+spec:
+  type: ClusterIP
+  selector:
+    app: lvn-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

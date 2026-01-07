@@ -15,7 +15,7 @@
     </div>
     <div class="error-visuals single">
         <!-- Remplacer par votre image personnalisée -->
-        <img src="{{ url_for('static', path='img/error_404.png') }}" alt="Scène introuvable" class="error-img">
+        <img src="{{ static_url(request, 'img/error_404.png') }}" alt="Scène introuvable" class="error-img">
     </div>
 </section>
 {% endblock %}
